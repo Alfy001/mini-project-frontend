@@ -1,7 +1,27 @@
 import React, { useState } from 'react';
 import { Guitar as Hospital, Users, FileUp, AlertCircle, Activity, Calendar, UserPlus, ClipboardList } from 'lucide-react';
 import axios from 'axios';
-import getContract from '../utils/contract';
+import {
+
+  Box,
+
+  Button,
+
+  Typography,
+
+  TextField,
+
+  Drawer,
+
+  List,
+
+  ListItem,
+
+  ListItemText,
+
+} from "@mui/material";
+
+import getContract from "../utils/contract";
 import './HospitalDashboard.css';
 
 const navItems = [
