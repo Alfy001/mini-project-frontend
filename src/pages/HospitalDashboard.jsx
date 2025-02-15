@@ -1,8 +1,8 @@
 import React, { useState } from 'react';
 import { Guitar as Hospital, Users, FileUp, AlertCircle, Activity, Calendar, UserPlus, ClipboardList } from 'lucide-react';
 import axios from 'axios';
+import getContract from '../utils/contract';
 import './HospitalDashboard.css';
-import getContract from "../utils/contract";
 
 const navItems = [
   { icon: Users, text: "Register Patient", section: "registerPatient" },
@@ -54,6 +54,7 @@ function HospitalDashboard() {
   // Fetch patient details
   const fetchPatientDetails = async () => {
     try {
+      setIsLoading(true);
       const contract = await getContract();
       const patientCID = await contract.getPatientCID(walletAddress);
 
@@ -87,6 +88,8 @@ function HospitalDashboard() {
       }
     } catch (error) {
       setMessage("Error: " + (error.response?.data?.error || error.message));
+    } finally {
+      setIsLoading(false);
     }
   };
 
