@@ -1,10 +1,10 @@
 import React, { useState } from 'react';
 import { Heart, Guitar as Hospital, UserCog, ChevronRight, Shield, Users, ClipboardCheck, Clock } from 'lucide-react';
 import { MessageCircle, Star, Twitter, Facebook, Instagram, Mail } from 'lucide-react';
-import './Home.css'; // Import the CSS file
+import './home.css'; // Import the CSS file
 import { useNavigate } from 'react-router-dom';
 import getContract from "../utils/contract";
-import MapComponent from 'D:/alaina/newHealthLink/frontend/src/components/Mapcomponent.jsx'; // Import the MapComponent
+import MapComponent from '../components/Mapcomponent'; // Import the MapComponent
 import ChatBot from '../components/chatbot'; // Import the ChatBot component
  
 function Home() {

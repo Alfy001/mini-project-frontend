@@ -42,7 +42,7 @@ function HospitalDashboard() {
       }
 
       const signerAddress = await contract.signer.getAddress();
-      const response = await axios.post("http://192.168.215.3:3000/get-patient-cid", {
+      const response = await axios.post("https://mini-project-backend-3ao5.onrender.com//get-patient-cid", {
         uniqueId: patientCID,
         patientad: walletAddress,
         signerAddress,
@@ -95,7 +95,7 @@ function HospitalDashboard() {
       formData.append("signerAddress", signerAddress);
       formData.append("file", file);
 
-      await axios.post("http://192.168.215.3:3000/update-cid", formData, {
+      await axios.post("https://mini-project-backend-3ao5.onrender.com//update-cid", formData, {
         headers: {
           "Content-Type": "multipart/form-data",
         },

@@ -31,7 +31,7 @@ function PatientDashboard() {
       }
 
       const signerAddress = await contract.signer.getAddress();
-      const response = await axios.post("http://192.168.215.3:3000/get-patient-cid", {
+      const response = await axios.post("https://mini-project-backend-3ao5.onrender.com//get-patient-cid", {
         uniqueId: patientCID,
         patientad: walletAddress,
         signerAddress,
