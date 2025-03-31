@@ -45,7 +45,20 @@ function AdminDashboard() {
         hospitalMapLink
       );
       await tx.wait();
+      const response = await axios.post(" https://mini-project-backend-3ao5.onrender.com/store-hospital-data", {
+            hospitalName,
+            hospitalMapLink,
+
+            });
+      
+      console.log(response.data); 
+      
+            
+      
       setMessage(`Hospital "${hospitalName}" registered successfully.`);
+     
+      
+
     } catch (error) {
       setMessage("Error: " + error.message);
     } finally {

@@ -5,7 +5,7 @@ import getContract from '../utils/contract';
 import './HospitalDashboard.css';
 
 const navItems = [
-  { icon: Users, text: "Register Patient", section: "registerPatient" },
+  //{ icon: Users, text: "Register Patient", section: "registerPatient" },
   { icon: Hospital, text: "Get Patient Details", section: "fetchDetails" },
   { icon: FileUp, text: "Update Patient Details", section: "updateDetails" },
 ];
@@ -29,149 +29,36 @@ function HospitalDashboard() {
     setMessage("");
   };
 
-  // Patient registration
-  const registerPatient = async () => {
-    try {
-      setIsLoading(true);
-  
-      // Step 1: Register the patient in the smart contract
-      const contract = await getContract();
-      const tx = await contract.registerPatient(walletAddress);
-      await tx.wait(); // Wait for the transaction to be confirmed
-  
-      console.log("Patient registered in the smart contract.");
-  
-      // Step 2: Call the backend to create a folder and update the CID
-      const response = await axios.post(" https://mini-project-backend-3ao5.onrender.com/create-folder", {
-        patientAddress: walletAddress,
-      });
-  
-      if (response.data.uniqueId) {
-        setMessage(`Patient ${walletAddress} registered and CID created successfully!`);
-      }
-    } catch (error) {
-      setMessage("Error: " + (error.message || "Failed to register patient and create CID."));
-      console.error("Error in registerPatient:", error);
-    } finally {
-      setIsLoading(false);
-    }
-  };
-
   // Fetch patient details
   const fetchPatientDetails = async () => {
     try {
       setIsLoading(true);
       const contract = await getContract();
       const patientCID = await contract.getPatientCID(walletAddress);
-  
+
       if (patientCID === "pending") {
         setMessage("Patient CID is still pending registration.");
         return;
       }
-  
+
       const signerAddress = await contract.signer.getAddress();
-      const response = await axios.post(" https://mini-project-backend-3ao5.onrender.com/get-patient-cid", {
+      const response = await axios.post("http://192.168.215.3:3000/get-patient-cid", {
         uniqueId: patientCID,
         patientad: walletAddress,
         signerAddress,
       });
-  
+
       const { ipfsLink } = response.data;
-      console.log("IPFS Link:", ipfsLink);
-  
+
       const newWindow = window.open("", "_blank");
       if (newWindow) {
         newWindow.document.write(`
-          <!DOCTYPE html>
-          <html lang="en">
-          <head>
-            <meta charset="UTF-8">
-            <meta name="viewport" content="width=device-width, initial-scale=1.0">
-            <title>Patient Details</title>
-            <style>
-              body {
-                margin: 0;
-                padding: 0;
-                overflow: hidden;
-                font-family: Arial, sans-serif;
-              }
-              .navbar {
-                position: fixed;
-                top: 0;
-                left: 0;
-                width: 100%;
-                height: 50px;
-                background-color: #2563eb;
-                color: white;
-                display: flex;
-                align-items: center;
-                justify-content: space-between;
-                padding: 0 20px;
-                box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
-                z-index: 1000;
-              }
-              .navbar h1 {
-                font-size: 1.25rem;
-                font-weight: 600;
-                margin: 0;
-              }
-              .navbar button {
-                background: none;
-                border: none;
-                color: white;
-                font-size: 1rem;
-                cursor: pointer;
-              }
-              #pdf-viewer {
-                position: fixed;
-                top: 50px;
-                left: 0;
-                width: 100%;
-                height: calc(100% - 50px);
-                overflow: auto;
-              }
-              canvas {
-                display: block;
-                margin: 0 auto;
-              }
-            </style>
-            <script src="https://cdnjs.cloudflare.com/ajax/libs/pdf.js/3.4.120/pdf.min.js" integrity="sha512-ml/QKfG3+Yes6TwOzQb7aCNtJF4PUyha6R3w8pSTo/VJSywl7ZreYvvtUso7fKevpsI+pYVVwnu82YO0q3V6eg==" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
-          </head>
-          <body>
-            <div class="navbar">
-              <h1>Patient Details</h1>
-            
-            </div>
-            <div id="pdf-viewer"></div>
-            <script>
-              const url = "${ipfsLink}";
-              const container = document.getElementById('pdf-viewer');
-  
-              pdfjsLib.getDocument(url).promise.then(pdf => {
-                for (let pageNum = 1; pageNum <= pdf.numPages; pageNum++) {
-                  pdf.getPage(pageNum).then(page => {
-                    const viewport = page.getViewport({ scale: 1.5 });
-                    const canvas = document.createElement('canvas');
-                    const context = canvas.getContext('2d');
-                    canvas.height = viewport.height;
-                    canvas.width = viewport.width;
-  
-                    container.appendChild(canvas);
-  
-                    const renderContext = {
-                      canvasContext: context,
-                      viewport: viewport,
-                    };
-                    page.render(renderContext);
-                  });
-                }
-              }).catch(error => {
-                console.error('Error loading PDF:', error);
-                alert('Failed to load PDF. Please check the link.');
-              });
-            </script>
-          </body>
-          </html>
+          <iframe 
+            src="${ipfsLink}" 
+            width="100%" 
+            height="100%" 
+            style="border:none;"
+          ></iframe>
         `);
         setMessage("Patient details retrieved successfully.");
       } else {
@@ -183,6 +70,7 @@ function HospitalDashboard() {
       setIsLoading(false);
     }
   };
+
   // Update patient details
   const updatePatientDetails = async () => {
     if (!file) {
@@ -207,7 +95,7 @@ function HospitalDashboard() {
       formData.append("signerAddress", signerAddress);
       formData.append("file", file);
 
-      await axios.post(" https://mini-project-backend-3ao5.onrender.com/update-cid", formData, {
+      await axios.post("http://192.168.215.3:3000/update-cid", formData, {
         headers: {
           "Content-Type": "multipart/form-data",
         },
@@ -240,7 +128,7 @@ function HospitalDashboard() {
       <div className="sidebar">
         <div className="sidebar-header">
           <h1 className="brand-title">HealthLink</h1>
-          <p className="brand-subtitle">Hospital Dashboard</p>
+          <p className="brand-subtitle">TestCenter</p>
         </div>
         <nav className="sidebar-nav">
           {navItems.map((item) => {
@@ -328,7 +216,7 @@ function HospitalDashboard() {
                         PDF, DOC up to 10MB
                       </p>
                     </div>
-                  </div>  
+                  </div>
                 </div>
               )}
 

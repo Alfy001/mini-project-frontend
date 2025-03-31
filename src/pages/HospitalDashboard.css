@@ -389,4 +389,15 @@
     .stats-grid {
       grid-template-columns: 1fr;
     }
+    .heart-rate-display {
+      text-align: center;
+      margin-top: 20px;
+    }
+    
+    .heart-rate-display h3 {
+      font-size: 1.5rem;
+      margin: 10px 0;
+    }
+    /* CSS for the iframe container and red strip overlay */
+
   }
