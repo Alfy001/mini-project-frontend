@@ -118,7 +118,7 @@ function Home() {
       <nav className="navbar">
         <div className="navbar-content">
           <div className="navbar-logo">
-            <img src="https://envs.sh/hWk.png" alt="HealthLink Logo" className="logo" />
+            <img src="########" alt="HealthLink Logo" className="logo" />
             <span style={{ color: "white" }}>HealthLink</span>
           </div>
           <div className="navbar-buttons">
