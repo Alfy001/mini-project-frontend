@@ -334,7 +334,7 @@ function Home() {
       <footer className="footer">
         <div className="footer-content">
           <div className="footer-logo">
-            <img src="https://envs.sh/hWk.png" alt="HealthLink Logo" className="logo" />
+            <img src="####" alt="HealthLink Logo" className="logo" />
             <span>HealthLink</span>
           </div>
           <div className="footer-social">
