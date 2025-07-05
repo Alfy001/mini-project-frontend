@@ -165,7 +165,7 @@ function Home() {
           </div>
           <div className="hero-image">
             <img
-              src="https://envs.sh/hWk.png"
+              src="###########"
               alt="Healthcare"
             />
           </div>
